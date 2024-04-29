@@ -5,7 +5,7 @@ const startButton = document.querySelector('#start');
 const score = document.querySelector('#score'); // Use querySelector() to get the score element
 const timerDisplay = document.querySelector('#timer'); // use querySelector() to get the timer element.
 
-let time = 0;
+let time = 10;
 let timer;
 let lastHole = 0;
 let points = 0;
@@ -187,7 +187,7 @@ function showAndHide(hole, delay){
 */
 function toggleVisibility(hole){
   // TODO: add hole.classList.toggle so that it adds or removes the 'show' class.
-  hole.classList.toggle('show');
+  hole.classList.toggle("show");
   return hole;
 }
 
@@ -245,8 +245,9 @@ function updateTimer() {
 */
 function startTimer() {
   // TODO: Write your code here
-  // timer = setInterval(updateTimer, 1000);
-  return timer;
+  updateTimer(); 
+  timer = setInterval(updateTimer, 1000);
+  //return timer;
 }
 
 /**
@@ -260,8 +261,11 @@ function startTimer() {
 function whack(event) {
   // TODO: Write your code here.
   // call updateScore()
+  const mole = event.currentTarget;
   updateScore();
   playHit();
+  animateWhack(mole);
+  hitSound(); 
   return points;
 }
 
@@ -273,7 +277,7 @@ function whack(event) {
 function setEventListeners(){
   // TODO: Write your code here
   moles.forEach(
-    mole => mole.addEventListener('click', whack)
+    mole => mole.addEventListener("click", whack)
   );
   return moles;
 }
@@ -296,8 +300,9 @@ function setDuration(duration) {
 *
 */
 function stopGame(){
-  // stopAudio(song);  //optional
+  stopAudio(song);  //optional
   clearInterval(timer);
+  menuShow(); 
   return "game stopped";
 }
 
@@ -310,7 +315,9 @@ function stopGame(){
 function startGame(){
   //setDuration(10);
   play();
+  clearScore();
   setDuration(10);
+  points = 0;
   startTimer();
   setEventListeners();
   moles.forEach(hole => hole.classList.remove('show'));//hide the moles
